@@ -1,0 +1,27 @@
+Master Answer Sheet (masteranssheet2.jpg):
+.
+Unsupervised learning on the other hand deals with data that has no predefined labels or categories
+.
+Instead of learning from explicit input output pairs the algorithm analyzes the .. structure of the data and identifies patterns clusters or relationships on its own
+This approach is widely used for clustering anomaly detection and dimensionality reduction
+For example businesses vs unsupervised learning to segment customers based on purchasing behavior allowing them to color marketing strategies
+Since it does not rely on labeled data it is particularly useful when data is unstructured or when patterns are not immediately apparent
+Popular algorithms in unsupervised learning inched k means clustering hierarchical cheering and principal component analysis cay
+
+Student Answer Sheet (studentanssheet1.jpg):
+I ee ee se vote al cc of conyeefmenie 1s known ap bumble sr see ores line are qutesmen os we oc tore a th baby gt rt 9 se ate achy seen inner ot she have ton dee the he comply spoke se command pr 4 the sleep
+Avs s2 2.230 so a oy 4 i792 a m2 meiny omen g6 bk cam it me 8 a hk a. h a g4 q g g ta gainer gas a so 5 are varlets q fruits maria guava a v typical q anna he he nb ro n 4 3 .
+Eager cf ao oy tex fake v .
+San 4 cabastede the prolallit 4 jail fat le 7 a freak 21 ts a 52 21 no e ve d 1 tnturinlewed ty a i eel r boy tr a see ee one eyes ee
+
+Student Answer Sheet (studentanssheet2.jpg):
+Unsupervised learning on the other hand deals with data that has no predefined labels or categories
+Instead of learning from explicit input output pairs the algorithm anoles the structure of the date and identifies patterns clusters or real townships on i s on
+This approach is widely used for clustering gorey detection and dimension city redochon.
+For example businesses use unsupervised learning to segment customers bossed on purchasing behavior following them o tailor marketing strategies
+Since it does not rely on labeled data it is particularly .
+Useful then data is unstructured or when poarrems are nor immediately apparent
+.
+Popular algorithms in unsupervised leaving include k means clustering hierarchical clustering and principal .
+Component analysis ca .
+

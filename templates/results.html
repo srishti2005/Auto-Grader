@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results | AutoGrader</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 80px;
+        }
+        
+        .navbar {
+            background-color: var(--dark-color) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .navbar.fixed-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .main-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+        }
+        
+        .progress-bar {
+            background-color: var(--primary-color);
+        }
+        
+        .badge {
+            font-size: 0.9rem;
+            padding: 0.5em 0.75em;
+        }
+        
+        .bg-primary {
+            background-color: var(--primary-color) !important;
+        }
+        
+        .bg-success {
+            background-color: var(--secondary-color) !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 10px 25px;
+        }
+        
+        .btn-secondary {
+            background-color: #7f8c8d;
+            border: none;
+            padding: 10px 25px;
+        }
+        
+        .user-greeting {
+            color: var(--light-color);
+            font-weight: 600;
+        }
+        
+        .results-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .grade-card {
+            border-left: 5px solid;
+            border-radius: 8px;
+        }
+        
+        .grade-A {
+            border-color: var(--secondary-color);
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+        
+        .grade-B {
+            border-color: #2ecc71;
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+        
+        .grade-C {
+            border-color: #f39c12;
+            background-color: rgba(243, 156, 18, 0.1);
+        }
+        
+        .grade-D {
+            border-color: #e67e22;
+            background-color: rgba(230, 126, 34, 0.1);
+        }
+        
+        .grade-F {
+            border-color: #e74c3c;
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        
+        .file-info {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        .student-selector {
+            max-width: 300px;
+            margin-bottom: 1.5rem;
+        }
+        .text-preview {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+        }
+        .btn-group-actions {
+            gap: 1rem;
+        }
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-nav">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap me-2"></i>AutoGrader
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text user-greeting me-3">Welcome, {{ username }}</span>
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+        
+    <div class="container py-4">
+        <div class="results-container">
+            <div class="main-card">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Grading Results</h4>
+                    <small class="text-white file-info">Master File: {{ results.master_filename }}</small>
+                </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <select class="form-select student-selector" id="studentSelect">
+                                <option value="" disabled selected>Select Student Report</option>
+                                {% for student in results.students %}
+                                <option value="{{ loop.index0 }}">{{ student.student_filename }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+    
+                        <div class="row mb-4" id="currentReport">
+                            <!-- Dynamic content will be inserted here -->
+                        </div>
+    
+                        <div class="card mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Performance Analysis</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="resultsChart"></canvas>
+                            </div>
+                        </div>
+    
+                        <div class="d-grid gap-3 d-md-flex justify-content-md-end btn-group-actions">
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                            </a>
+                            <a href="{{ url_for('download_text') }}" class="btn btn-primary">
+                                <i class="fas fa-file-alt me-2"></i>Download Extracted Text
+                            </a>
+                            <a href="{{ url_for('download') }}" class="btn btn-primary">
+                                <i class="fas fa-download me-2"></i>Download Results
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <template id="reportTemplate">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <h5><i class="fas fa-file-alt me-2"></i>Content Similarity</h5>
+                <div class="d-flex align-items-center">
+                    <div class="progress flex-grow-1 me-3" style="height: 10px;">
+                        <div class="progress-bar" style="width: ${similarity}%"></div>
+                    </div>
+                    <span class="badge bg-primary">${similarityValue}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <h5><i class="fas fa-pen-fancy me-2"></i>Handwriting Quality</h5>
+                <div class="d-flex align-items-center">
+                    <div class="progress flex-grow-1 me-3" style="height: 10px;">
+                        <div class="progress-bar bg-success" style="width: ${hwQuality}%"></div>
+                    </div>
+                    <span class="badge bg-success">${hwQualityValue}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="grade-card p-3 mb-4 grade-${gradeClass}">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h4 class="mb-1">Final Grade: <strong>${grade}</strong></h4>
+                        <p class="mb-0">${gradeComment}</p>
+                    </div>
+                    <div class="display-4 ms-3">${gradeLetter}</div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        const students = {{ results.students|tojson }};
+        let currentChart = null;
+
+        // Initialize with first student
+        function initializeFirstStudent() {
+            if (students.length > 0) {
+                document.getElementById('studentSelect').value = 0;
+                updateReport(students[0]);
+                updateChart(students[0]);
+            }
+        }
+
+        // Rest of the JavaScript remains the same as previous answer
+        document.getElementById('studentSelect').addEventListener('change', function() {
+            const studentIndex = parseInt(this.value);
+            const student = students[studentIndex];
+            updateReport(student);
+            updateChart(student);
+        });
+
+        function updateReport(student) {
+            const template = document.getElementById('reportTemplate');
+            const reportContainer = document.getElementById('currentReport');
+            
+            const similarity = (student.similarity * 100).toFixed(2);
+            const hwQuality = (student.hw_quality * 100).toFixed(2);
+            const gradeLetter = student.grade[0];
+            
+            const gradeComments = {
+                'A': '<i class="fas fa-check-circle me-1"></i> Excellent match with model answer',
+                'B': '<i class="fas fa-check me-1"></i> Good match with minor deviations',
+                'C': '<i class="fas fa-minus-circle me-1"></i> Average match with some inconsistencies',
+                'D': '<i class="fas fa-exclamation-circle me-1"></i> Below average with significant differences',
+                'F': '<i class="fas fa-times-circle me-1"></i> Failed to match model answer'
+            };
+
+            const content = template.innerHTML
+                .replace(/\${similarity}/g, similarity)
+                .replace(/\${similarityValue}/g, student.similarity.toFixed(2))
+                .replace(/\${hwQuality}/g, hwQuality)
+                .replace(/\${hwQualityValue}/g, student.hw_quality.toFixed(2))
+                .replace(/\${gradeClass}/g, gradeLetter)
+                .replace(/\${grade}/g, student.grade)
+                .replace(/\${gradeComment}/g, gradeComments[gradeLetter])
+                .replace(/\${gradeLetter}/g, gradeLetter);
+
+            reportContainer.innerHTML = content;
+        }
+
+        function updateChart(student) {
+            if (currentChart) {
+                currentChart.destroy();
+            }
+            
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Content Similarity', 'Handwriting Quality'],
+                    datasets: [{
+                        label: 'Performance Metrics',
+                        data: [student.similarity, student.hw_quality],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(46, 204, 113, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(52, 152, 219, 1)',
+                            'rgba(46, 204, 113, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 1,
+                            ticks: {
+                                callback: function(value) {
+                                    return (value * 100) + '%';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return (context.raw * 100).toFixed(2) + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize when page loads
+        window.addEventListener('DOMContentLoaded', initializeFirstStudent);
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
