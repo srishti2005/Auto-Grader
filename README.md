@@ -42,4 +42,32 @@ Coming Soon... (Add a Railway or video demo link here)
 ---
 
 ## 🏗️ Project Structure
+Auto_Grading/
+│
+├── app.py # Main Flask backend
+├── grading_model.py # OCR and grading logic
+├── requirements.txt # Python dependencies
+├── Dockerfile # Docker setup for Railway
+├── Procfile # Process runner for deployment
+├── templates/ # HTML frontend (Jinja2)
+├── static/ # CSS & static assets
+├── uploads/ # Temporary file uploads
+└── users.db # SQLite database
+
+
+## 🛠️ Setup Instructions (Local)
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/srishti2005/Auto-Grader.git
+cd Auto-Grader
+### 2. Create virtual environment & install dependencies
+python -m venv venv
+source venv/bin/activate    # or .\venv\Scripts\activate on Windows
+pip install -r requirements.txt
+### 3. Download NLTK Data
+python -m nltk.downloader punkt
+### 4. Run the app locally
+python app.py
 
