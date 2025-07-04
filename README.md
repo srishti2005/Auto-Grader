@@ -62,12 +62,18 @@ Auto_Grading/
 ```bash
 git clone https://github.com/srishti2005/Auto-Grader.git
 cd Auto-Grader
+```
 ### 2. Create virtual environment & install dependencies
+```bash
 python -m venv venv
 source venv/bin/activate    # or .\venv\Scripts\activate on Windows
 pip install -r requirements.txt
+```
 ### 3. Download NLTK Data
+```bash
 python -m nltk.downloader punkt
+```
 ### 4. Run the app locally
+```bash
 python app.py
 
