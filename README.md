@@ -24,7 +24,7 @@ Auto-Grader is a machine learning-based web application that automates the gradi
 
 ## 🖼️ Demo
 
-Coming Soon... (Add a Railway or video demo link here)
+[![Watch the demo](https://img.youtube.com/vi/40A93ZSiEcY/maxresdefault.jpg)](https://www.youtube.com/watch?v=40A93ZSiEcY)
 
 ---
 
